@@ -52,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-          os: [ windows-latest, ubuntu-latest, macOS-latest ]
+          os: [ windows-latest ]
         fail-fast: false
     steps:
       - name: Install Dependencies
@@ -131,3 +131,9 @@ jobs:
           file: aseprite/build/bin/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
           asset_name: Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
           tag: ${{ needs.create-release.outputs.release-tag }}
+      - name: Upload Windows Artifact  # 👈 新增的 Artifact 上传步骤
+        if: runner.os == 'Windows'     # 确保只在 Windows 环境执行
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aseprite-Windows
+          path: aseprite/build/bin/Aseprite-${{ needs.create-release.outputs.release-tag }}-Windows.zip
